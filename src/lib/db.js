@@ -1,15 +1,27 @@
-"use server"
-import mongoose from "mongoose";
-import "dotenv/config"
+const mongoose = require("mongoose");
 
+require("dotenv").config();
 
-export const CreateServer = async()=>{
-    const URI = process.env.MONGODB_URI;
-    try {
-        await mongoose.connect(URI)
-        console.log("Server connected Successfully")
-    } catch (error) {
-        console.log("Server connection failed")
-        process.exit(1);
-    }
+let cachedConnection = null;
+
+async function CreateServer() {
+  const URI = process.env.MONGODB_URI;
+
+  // Return if already connected
+  if (cachedConnection && mongoose.connection.readyState === 1) {
+    console.log("✅ Using cached MongoDB connection");
+    return;
+  }
+
+  try {
+    console.log("🔗 Connecting to MongoDB...");
+    await mongoose.connect(URI);
+    cachedConnection = mongoose.connection;
+    console.log("✅ MongoDB connected successfully");
+  } catch (error) {
+    console.error("❌ MongoDB connection failed:", error.message);
+    throw error;
+  }
 }
+
+module.exports = { CreateServer };

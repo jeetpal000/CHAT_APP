@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const UserTableSchema = new mongoose.Schema(
   {
@@ -16,21 +16,20 @@ const UserTableSchema = new mongoose.Schema(
     },
     about: {
       type: String,
-      
     },
-    avatar:{
+    avatar: {
       type: String,
     },
     isProfileCompleted: {
-    type: Boolean,
-    default: false
-  }
+      type: Boolean,
+      default: false,
+    },
   },
-  
-  { timestamps: true },
+  { timestamps: true }
 );
 
-export const UserTable = mongoose.models.UserTable || mongoose.model("UserTable", UserTableSchema);
+const UserTable =
+  mongoose.models.UserTable || mongoose.model("UserTable", UserTableSchema);
 
 const SessionSchema = new mongoose.Schema(
   {
@@ -57,8 +56,19 @@ const SessionSchema = new mongoose.Schema(
       index: { expires: 86400 },
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-export const SessionTable =
+const SessionTable =
   mongoose.models.SessionTable || mongoose.model("SessionTable", SessionSchema);
+
+const messageSchema = new mongoose.Schema({
+  text: { type: String, required: true },
+  sender: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+});
+
+const MessageTable =
+  mongoose.models.MessageTable || mongoose.model("MessageTable", messageSchema);
+
+module.exports = { UserTable, SessionTable, MessageTable };

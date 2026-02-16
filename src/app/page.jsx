@@ -27,9 +27,9 @@ const Page = () => {
   }, [session, status, router]);
 
   // Show loading state
-  if (status === "loading" || !userData) {
-    return <div className="font-bold text-center text-3xl">Loading...</div>;
-  }
+  // if (status === "loading" || !userData) {
+  //   return <div className="font-bold text-center text-3xl">Loading...</div>;
+  // }
 
   // console.log("userData", userData);
 
